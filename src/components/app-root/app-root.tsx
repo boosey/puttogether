@@ -1,5 +1,8 @@
 import { Component, Prop, Listen } from '@stencil/core';
-
+// import { authState } from 'rxfire/auth';
+// import { collectionData } from 'rxfire/firestore';
+// import { filter } from 'rxjs/operators';
+ 
 @Component({
   tag: 'app-root',
   styleUrl: 'app-root.css'
