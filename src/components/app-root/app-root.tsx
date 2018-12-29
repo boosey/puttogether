@@ -1,47 +1,37 @@
 <reference types="firebase" />
-
 declare var firebase: firebase.app.App;
 
 import { Component, Prop, Listen, Event, EventEmitter, State } from '@stencil/core';
-import { authState } from 'rxfire/auth';
-// import { collectionData } from 'rxfire/firestore';
-import { filter } from 'rxjs/operators';
 
 @Component({
   tag: 'app-root',
   styleUrl: 'app-root.css'
 })
 
-
-
 export class AppRoot {
 
   @State() user = null
-
   @Prop({ connect: 'ion-toast-controller' }) toastCtrl: HTMLIonToastControllerElement;
 
   @Event() loginCompleted: EventEmitter
 
   private router = null
-  private appRootLoaded = false
+  @State() appRootLoaded = false
 
   componentDidLoad() {
     this.appRootLoaded = true
-    // if (this.user !== null && this.router !== null) { this.router.push("/") }
-    if (this.user !== null && this.router !== null) { this.loginCompleted.emit() }
+    if (this.user !== null) { this.loginCompleted.emit() }
   }
 
   @Listen('userUpdated')
   userUpdatedHandler(ev) {
     this.user = ev.detail
-    // this.loginCompleted.emit()
-    // if (this.user !== null && this.router !== null) { this.router.goBack() }
-    // if (this.user !== null && this.router !== null) { this.router.push("/") }
-    if (this.user !== null && this.router !== null) { this.loginCompleted.emit() }
+    if (this.appRootLoaded) { this.loginCompleted.emit() }
   }
 
   @Listen('loginCompleted')
-  loginCompletedHandler(ev) {
+  async loginCompletedHandler(ev) {
+    await this.router.componentOnReady()
     this.router.push("/")
   }
 
