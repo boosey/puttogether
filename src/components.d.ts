@@ -13,33 +13,68 @@ import 'ionicons';
 
 export namespace Components {
 
+  interface AppCommands {}
+  interface AppCommandsAttributes extends StencilHTMLAttributes {
+    'onUserUpdated'?: (event: CustomEvent) => void;
+  }
+
   interface AppHome {}
   interface AppHomeAttributes extends StencilHTMLAttributes {}
 
-  interface AppProfile {
-    'name': string;
+  interface AppLogin {}
+  interface AppLoginAttributes extends StencilHTMLAttributes {
+    'onLoginCompleted'?: (event: CustomEvent) => void;
+    'onLoginRequested'?: (event: CustomEvent) => void;
   }
-  interface AppProfileAttributes extends StencilHTMLAttributes {
-    'name'?: string;
+
+  interface AppMainmenu {
+    'close': () => void;
+  }
+  interface AppMainmenuAttributes extends StencilHTMLAttributes {
+    'onLogoutCompleted'?: (event: CustomEvent) => void;
+    'onLogoutRequested'?: (event: CustomEvent) => void;
   }
 
   interface AppRoot {}
-  interface AppRootAttributes extends StencilHTMLAttributes {}
+  interface AppRootAttributes extends StencilHTMLAttributes {
+    'onLoginCompleted'?: (event: CustomEvent) => void;
+  }
+
+  interface AppSubpageHeader {
+    'button': string;
+    'titleText': string;
+  }
+  interface AppSubpageHeaderAttributes extends StencilHTMLAttributes {
+    'button'?: string;
+    'titleText'?: string;
+  }
 }
 
 declare global {
   interface StencilElementInterfaces {
+    'AppCommands': Components.AppCommands;
     'AppHome': Components.AppHome;
-    'AppProfile': Components.AppProfile;
+    'AppLogin': Components.AppLogin;
+    'AppMainmenu': Components.AppMainmenu;
     'AppRoot': Components.AppRoot;
+    'AppSubpageHeader': Components.AppSubpageHeader;
   }
 
   interface StencilIntrinsicElements {
+    'app-commands': Components.AppCommandsAttributes;
     'app-home': Components.AppHomeAttributes;
-    'app-profile': Components.AppProfileAttributes;
+    'app-login': Components.AppLoginAttributes;
+    'app-mainmenu': Components.AppMainmenuAttributes;
     'app-root': Components.AppRootAttributes;
+    'app-subpage-header': Components.AppSubpageHeaderAttributes;
   }
 
+
+  interface HTMLAppCommandsElement extends Components.AppCommands, HTMLStencilElement {}
+  var HTMLAppCommandsElement: {
+    prototype: HTMLAppCommandsElement;
+    new (): HTMLAppCommandsElement;
+  };
 
   interface HTMLAppHomeElement extends Components.AppHome, HTMLStencilElement {}
   var HTMLAppHomeElement: {
@@ -47,10 +82,16 @@ declare global {
     new (): HTMLAppHomeElement;
   };
 
-  interface HTMLAppProfileElement extends Components.AppProfile, HTMLStencilElement {}
-  var HTMLAppProfileElement: {
-    prototype: HTMLAppProfileElement;
-    new (): HTMLAppProfileElement;
+  interface HTMLAppLoginElement extends Components.AppLogin, HTMLStencilElement {}
+  var HTMLAppLoginElement: {
+    prototype: HTMLAppLoginElement;
+    new (): HTMLAppLoginElement;
+  };
+
+  interface HTMLAppMainmenuElement extends Components.AppMainmenu, HTMLStencilElement {}
+  var HTMLAppMainmenuElement: {
+    prototype: HTMLAppMainmenuElement;
+    new (): HTMLAppMainmenuElement;
   };
 
   interface HTMLAppRootElement extends Components.AppRoot, HTMLStencilElement {}
@@ -59,16 +100,28 @@ declare global {
     new (): HTMLAppRootElement;
   };
 
+  interface HTMLAppSubpageHeaderElement extends Components.AppSubpageHeader, HTMLStencilElement {}
+  var HTMLAppSubpageHeaderElement: {
+    prototype: HTMLAppSubpageHeaderElement;
+    new (): HTMLAppSubpageHeaderElement;
+  };
+
   interface HTMLElementTagNameMap {
+    'app-commands': HTMLAppCommandsElement
     'app-home': HTMLAppHomeElement
-    'app-profile': HTMLAppProfileElement
+    'app-login': HTMLAppLoginElement
+    'app-mainmenu': HTMLAppMainmenuElement
     'app-root': HTMLAppRootElement
+    'app-subpage-header': HTMLAppSubpageHeaderElement
   }
 
   interface ElementTagNameMap {
+    'app-commands': HTMLAppCommandsElement;
     'app-home': HTMLAppHomeElement;
-    'app-profile': HTMLAppProfileElement;
+    'app-login': HTMLAppLoginElement;
+    'app-mainmenu': HTMLAppMainmenuElement;
     'app-root': HTMLAppRootElement;
+    'app-subpage-header': HTMLAppSubpageHeaderElement;
   }
 
 

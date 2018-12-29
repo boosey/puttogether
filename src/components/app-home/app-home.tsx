@@ -6,11 +6,27 @@ import { Component } from '@stencil/core';
 })
 export class AppHome {
 
+  private menu
+
   render() {
     return [
+      <app-mainmenu ref={(el) => this.menu = el}></app-mainmenu>,
+
       <ion-header>
         <ion-toolbar color="primary">
-          <ion-title>Home</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-toggle menu="start">
+            <ion-button>
+              <ion-icon slot="icon-only" name="menu"></ion-icon>
+            </ion-button>
+          </ion-menu-toggle>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button href="/addgame">
+            <ion-icon slot="icon-only" name="add"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title>What Can I Bring?</ion-title>
         </ion-toolbar>
       </ion-header>,
 
@@ -22,7 +38,6 @@ export class AppHome {
           check out our docs on <a href="https://stenciljs.com">stenciljs.com</a> to get started.
         </p>
 
-        <ion-button href="/profile/ionic" expand="block">Profile page</ion-button>
       </ion-content>
     ];
   }

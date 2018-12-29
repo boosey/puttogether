@@ -26,6 +26,25 @@
   <link rel="manifest" href="/manifest.json">
 </head>
 
+<script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-auth.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCydoJ3S2kafFQNlWHzNlTSwRNX7e5JtE0",
+    authDomain: "what-can-i-bring.firebaseapp.com",
+    databaseURL: "https://what-can-i-bring.firebaseio.com",
+    projectId: "what-can-i-bring",
+    storageBucket: "what-can-i-bring.appspot.com",
+    messagingSenderId: "955347022680"
+  };
+  firebase.initializeApp(config);
+
+  const firestore = firebase.firestore();
+  firestore.settings({ timestampsInSnapshots: true});
+</script>
+
 <body>
 
   <app-root></app-root>
