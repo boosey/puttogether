@@ -17,28 +17,20 @@ export class AppEditEvent {
 
     @State() currentEvent = {
       name: '',
-      date: this.formatDate(new Date()), // from Date to string
-      time: this.formatTime(new Date()),
+      datetime: this.formatDateTime(new Date()),
     }
 
     private startDatePicker
     private startTimePicker
     private dateAsDate
     private timeAsDate
+    private datetimeAsDate
 
     @Event() loadEventFromIdRequested: EventEmitter
     @Event() updateEventRequested: EventEmitter
 
     formatDateTime(theDate): string {
-      return format(theDate, "YYYY-MM-DDThh:mm")
-    }
-
-    formatDate(theDate): string {
-      return format(theDate, "YYYY-MM-DD")
-    }
-
-    formatTime(theDate): string {
-      return format(theDate, "hh:mm")
+      return format(theDate, "YYYY-MM-DDThh:mm:ssZ")
     }
 
     componentWillLoad() {
@@ -48,8 +40,7 @@ export class AppEditEvent {
         .subscribe((loadedEvent) => {
           this.currentEvent = {...this.currentEvent, ...loadedEvent}
           // from string to date
-          this.dateAsDate = parse(this.currentEvent.date)
-          this.timeAsDate = parse("2000-01-01T" + this.currentEvent.time)
+          this.datetimeAsDate = parse(this.currentEvent.datetime)
          })
 
         var request = { data: this.eventId, status: requestStatus}
@@ -78,22 +69,21 @@ export class AppEditEvent {
         }
 
         case 'event-time':
-
-          this.timeAsDate =
-            setHours(this.timeAsDate, tointeger(format(value, "hh")))
-          this.timeAsDate =
-            setMinutes(this.timeAsDate, tointeger(format(value, "mm")))
+          this.datetimeAsDate =
+            setHours(this.datetimeAsDate, tointeger(format(value, "hh")))
+          this.datetimeAsDate =
+            setMinutes(this.datetimeAsDate, tointeger(format(value, "mm")))
           break;
 
         case 'event-date':
-          this.dateAsDate =
-            setYear(this.dateAsDate, tointeger(format(value, "YYYY")))
+          this.datetimeAsDate =
+            setYear(this.datetimeAsDate, tointeger(format(value, "YYYY")))
           // Apparently the month is 0-based
-          this.dateAsDate =
-            setMonth(this.dateAsDate, tointeger(format(value, "MM"))-1)
-          this.dateAsDate =
-            setDate(this.dateAsDate, tointeger(format(value, "DD")))
-            break;
+          this.datetimeAsDate =
+            setMonth(this.datetimeAsDate, tointeger(format(value, "MM"))-1)
+          this.datetimeAsDate =
+            setDate(this.datetimeAsDate, tointeger(format(value, "DD")))
+          break;
       }
     }
 
@@ -109,8 +99,7 @@ export class AppEditEvent {
             }
         }
       )
-      this.currentEvent.date = this.formatDate(this.dateAsDate)
-      this.currentEvent.time = this.formatTime(this.timeAsDate)
+      this.currentEvent.datetime = this.formatDateTime(this.datetimeAsDate)
       var request = {
         eventId: this.eventId,
         creator: this.userid,
@@ -139,7 +128,7 @@ export class AppEditEvent {
                   ref={(el)=>this.startDatePicker = el}
                   display-format="MMM D, YYYY"
                   onChange={(ev) => this.changeValue(ev)}
-                  value={this.currentEvent.date}>
+                  value={this.currentEvent.datetime}>
                 </ion-datetime>
               </ion-item>
               <ion-item lines="none">
@@ -148,7 +137,7 @@ export class AppEditEvent {
                   ref={(el)=>this.startTimePicker = el}
                   display-format="h:mmA"
                   onChange={(ev) => this.changeValue(ev)}
-                  value={this.currentEvent.time}>
+                  value={this.currentEvent.datetime}>
                 </ion-datetime>
               </ion-item>
           </ion-list>
