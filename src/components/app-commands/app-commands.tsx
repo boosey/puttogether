@@ -4,8 +4,8 @@ declare var firebase: firebase.app.App;
 
 import { Component, Prop, Listen, Event, EventEmitter, State } from '@stencil/core';
 import { authState } from 'rxfire/auth';
-// import { collectionData } from 'rxfire/firestore';
-import { filter } from 'rxjs/operators';
+import { collectionData, docData } from 'rxfire/firestore';
+import { filter, first } from 'rxjs/operators';
 import { from, Subject } from 'rxjs';
 
 @Component({
@@ -15,6 +15,8 @@ import { from, Subject } from 'rxjs';
 export class AppCommands {
 
   @Event() userUpdated: EventEmitter
+
+  private eventsCollectionRef = firebase.firestore().collection('events')
 
   componentWillLoad() {
     // User logged out
@@ -31,6 +33,58 @@ export class AppCommands {
         var newUser = user;
         this.userUpdated.emit(newUser)
     })
+  }
+
+  @Listen('loadEventFromIdRequested')
+  loadEventFromIdRequestedHandler(ev) {
+    var eventId = ev.detail.data
+    var status = ev.detail.status
+    var eventRef = this.eventsCollectionRef.doc(eventId)
+
+    docData(eventRef).pipe(first()).subscribe((doc) => status.next(doc))
+
+  }
+
+  @Listen('loadEventsRequested')
+  loadEventsRequestedHandler(ev) {
+    var uid = ev.detail.data ? ev.detail.data.userid : ''
+    var status = ev.detail.status
+
+    if (typeof uid !== 'undefined' && uid !== null) {
+      var eventsQuery = this.eventsCollectionRef
+        .where('creator', "==", uid)
+
+      collectionData(eventsQuery, "eventId").subscribe(
+         (event) => status.next(event),
+         () => console.log("Error getting events"),
+         () => status.complete()
+      )
+
+    } else {
+      status.complete()
+    }
+  }
+
+  @Listen('updateEventRequested')
+  updateEventRequestedHandler(ev) {
+    var status = ev.detail.status
+    var eventId = ev.detail.eventId
+    var curEvent = ev.detail.data
+    curEvent.creator = ev.detail.creator
+
+    if (typeof eventId === 'undefined' ||
+               eventId === null) {
+      this.eventsCollectionRef
+        .add(curEvent)
+        .then((newDocRef)=> {
+          status.next(newDocRef)
+          status.complete()
+      })
+    } else {
+        this.eventsCollectionRef.doc(eventId)
+          .update(curEvent)
+          .then(status.complete())
+    }
   }
 
   @Listen('loginRequested')

@@ -18,8 +18,24 @@ export namespace Components {
     'onUserUpdated'?: (event: CustomEvent) => void;
   }
 
-  interface AppHome {}
-  interface AppHomeAttributes extends StencilHTMLAttributes {}
+  interface AppEditEvent {
+    'eventId': any;
+    'userid': any;
+  }
+  interface AppEditEventAttributes extends StencilHTMLAttributes {
+    'eventId'?: any;
+    'onLoadEventFromIdRequested'?: (event: CustomEvent) => void;
+    'onUpdateEventRequested'?: (event: CustomEvent) => void;
+    'userid'?: any;
+  }
+
+  interface AppHome {
+    'userid': string;
+  }
+  interface AppHomeAttributes extends StencilHTMLAttributes {
+    'onLoadEventsRequested'?: (event: CustomEvent) => void;
+    'userid'?: string;
+  }
 
   interface AppLogin {}
   interface AppLoginAttributes extends StencilHTMLAttributes {
@@ -53,6 +69,7 @@ export namespace Components {
 declare global {
   interface StencilElementInterfaces {
     'AppCommands': Components.AppCommands;
+    'AppEditEvent': Components.AppEditEvent;
     'AppHome': Components.AppHome;
     'AppLogin': Components.AppLogin;
     'AppMainmenu': Components.AppMainmenu;
@@ -62,6 +79,7 @@ declare global {
 
   interface StencilIntrinsicElements {
     'app-commands': Components.AppCommandsAttributes;
+    'app-edit-event': Components.AppEditEventAttributes;
     'app-home': Components.AppHomeAttributes;
     'app-login': Components.AppLoginAttributes;
     'app-mainmenu': Components.AppMainmenuAttributes;
@@ -74,6 +92,12 @@ declare global {
   var HTMLAppCommandsElement: {
     prototype: HTMLAppCommandsElement;
     new (): HTMLAppCommandsElement;
+  };
+
+  interface HTMLAppEditEventElement extends Components.AppEditEvent, HTMLStencilElement {}
+  var HTMLAppEditEventElement: {
+    prototype: HTMLAppEditEventElement;
+    new (): HTMLAppEditEventElement;
   };
 
   interface HTMLAppHomeElement extends Components.AppHome, HTMLStencilElement {}
@@ -108,6 +132,7 @@ declare global {
 
   interface HTMLElementTagNameMap {
     'app-commands': HTMLAppCommandsElement
+    'app-edit-event': HTMLAppEditEventElement
     'app-home': HTMLAppHomeElement
     'app-login': HTMLAppLoginElement
     'app-mainmenu': HTMLAppMainmenuElement
@@ -117,6 +142,7 @@ declare global {
 
   interface ElementTagNameMap {
     'app-commands': HTMLAppCommandsElement;
+    'app-edit-event': HTMLAppEditEventElement;
     'app-home': HTMLAppHomeElement;
     'app-login': HTMLAppLoginElement;
     'app-mainmenu': HTMLAppMainmenuElement;

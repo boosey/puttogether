@@ -1,4 +1,5 @@
-import { Component } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter, Listen } from '@stencil/core';
+import { Subject } from "rxjs";
 
 @Component({
   tag: 'app-home',
@@ -6,7 +7,28 @@ import { Component } from '@stencil/core';
 })
 export class AppHome {
 
+  @Prop()  userid: string = null
+  @State() events = null
+
+  @Event() loadEventsRequested: EventEmitter
+
   private menu
+  private loading = false;
+
+  componentDidLoad() {
+
+    if (this.userid !== null) {
+      var requestStatus = (new Subject())
+        .subscribe((events) => this.events = events)
+
+      var request = {
+        data: {'userid' : this.userid},
+        status: requestStatus
+      }
+      this.loadEventsRequested.emit(request)
+    }
+
+  }
 
   render() {
     return [
@@ -22,7 +44,7 @@ export class AppHome {
           </ion-menu-toggle>
         </ion-buttons>
         <ion-buttons slot="end">
-          <ion-button href="/addgame">
+          <ion-button href={"/"+ this.userid + "/events/add"}>
             <ion-icon slot="icon-only" name="add"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -31,13 +53,30 @@ export class AppHome {
       </ion-header>,
 
       <ion-content padding>
-        <p>
-          Welcome to the PWA Toolkit. You can use this starter to build entire
-          apps with web components using Stencil and ionic/core! Check out the
-          README for everything that comes in this starter out of the box and
-          check out our docs on <a href="https://stenciljs.com">stenciljs.com</a> to get started.
-        </p>
-
+        <ion-loading-controller></ion-loading-controller>
+        <ion-list>
+          {this.events ? this.events.map((e) => (
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>{e.name}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-grid>
+                    <ion-row>
+                     <ion-col>
+                        <ion-button
+                          href={("/" + this.userid + "/events/" + e.eventId + "/edit")}
+                          fill="outline" >
+                        Edit
+                        </ion-button>
+                     </ion-col>
+                     <ion-col />
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+          )) : ''}
+        </ion-list>
       </ion-content>
     ];
   }

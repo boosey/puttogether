@@ -9,7 +9,7 @@ import { Component, Event, EventEmitter, Prop } from '@stencil/core';
 export class AppSubpageHeader {
 
     @Prop() titleText: string = 'Set a Page Title'
-    @Prop() button: string
+    @Prop() button: string = null
 
     render() {
         return [

@@ -1,5 +1,3 @@
-<reference types="firebase" />
-declare var firebase: firebase.app.App;
 
 import { Component, Prop, Listen, Event, EventEmitter, State } from '@stencil/core';
 
@@ -10,7 +8,9 @@ import { Component, Prop, Listen, Event, EventEmitter, State } from '@stencil/co
 
 export class AppRoot {
 
-  @State() user = null
+  private user = null
+
+  @State() userSignedIn: boolean = false
   @Prop({ connect: 'ion-toast-controller' }) toastCtrl: HTMLIonToastControllerElement;
 
   @Event() loginCompleted: EventEmitter
@@ -26,13 +26,20 @@ export class AppRoot {
   @Listen('userUpdated')
   userUpdatedHandler(ev) {
     this.user = ev.detail
+
+    if (this.user === null) {
+      this.userSignedIn = false
+    } else {
+      this.userSignedIn = true
+    }
+
     if (this.appRootLoaded) { this.loginCompleted.emit() }
   }
 
   @Listen('loginCompleted')
   async loginCompletedHandler(ev) {
-    await this.router.componentOnReady()
-    this.router.push("/")
+    // await this.router.componentOnReady()
+    // this.router.push("/")
   }
 
   /**
@@ -56,14 +63,33 @@ export class AppRoot {
     window.location.reload();
   }
 
+  chooseDefaultRoute = () => {
+    if (this.userSignedIn === false) {
+      return <ion-route-redirect from="*" to="/login" />;
+    } else {
+      return <ion-route-redirect from="/login" to={"/" + this.user.uid + "/events"}/>
+    }
+  }
+
+  setHomeRedidirect() {
+    if (this.userSignedIn) {
+      console.log(this.user.uid)
+      return <ion-route-redirect from="/" to={"/" + this.user.uid + "/events"}/>
+    }
+  }
+
   render() {
     return (
       <ion-app>
-        <ion-router useHash={false} ref={(el)=>this.router = el}>
-          {((this.appRootLoaded !== null) && (this.user === null))
-             && <ion-route-redirect from="*" to="/login"/> }
-          <ion-route url="/" component="app-home" />
+        <ion-router useHash={false}>
+
+          { this.chooseDefaultRoute() }
+
+          <ion-route url="/:userid/events/add" component="app-edit-event"/>
+          <ion-route url="/:userid/events/:eventId/edit" component="app-edit-event"/>
+          <ion-route url="/:userid/events" component="app-home"/>
           <ion-route url="/login" component="app-login"/>
+
         </ion-router>
         <app-commands>
           <ion-nav />
