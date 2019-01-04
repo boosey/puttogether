@@ -37,6 +37,16 @@ export namespace Components {
     'userid'?: string;
   }
 
+  interface AppItems {
+    'eventId': string;
+    'userid': string;
+  }
+  interface AppItemsAttributes extends StencilHTMLAttributes {
+    'eventId'?: string;
+    'onLoadItemsRequested'?: (event: CustomEvent) => void;
+    'userid'?: string;
+  }
+
   interface AppLogin {}
   interface AppLoginAttributes extends StencilHTMLAttributes {
     'onLoginCompleted'?: (event: CustomEvent) => void;
@@ -71,6 +81,7 @@ declare global {
     'AppCommands': Components.AppCommands;
     'AppEditEvent': Components.AppEditEvent;
     'AppHome': Components.AppHome;
+    'AppItems': Components.AppItems;
     'AppLogin': Components.AppLogin;
     'AppMainmenu': Components.AppMainmenu;
     'AppRoot': Components.AppRoot;
@@ -81,6 +92,7 @@ declare global {
     'app-commands': Components.AppCommandsAttributes;
     'app-edit-event': Components.AppEditEventAttributes;
     'app-home': Components.AppHomeAttributes;
+    'app-items': Components.AppItemsAttributes;
     'app-login': Components.AppLoginAttributes;
     'app-mainmenu': Components.AppMainmenuAttributes;
     'app-root': Components.AppRootAttributes;
@@ -104,6 +116,12 @@ declare global {
   var HTMLAppHomeElement: {
     prototype: HTMLAppHomeElement;
     new (): HTMLAppHomeElement;
+  };
+
+  interface HTMLAppItemsElement extends Components.AppItems, HTMLStencilElement {}
+  var HTMLAppItemsElement: {
+    prototype: HTMLAppItemsElement;
+    new (): HTMLAppItemsElement;
   };
 
   interface HTMLAppLoginElement extends Components.AppLogin, HTMLStencilElement {}
@@ -134,6 +152,7 @@ declare global {
     'app-commands': HTMLAppCommandsElement
     'app-edit-event': HTMLAppEditEventElement
     'app-home': HTMLAppHomeElement
+    'app-items': HTMLAppItemsElement
     'app-login': HTMLAppLoginElement
     'app-mainmenu': HTMLAppMainmenuElement
     'app-root': HTMLAppRootElement
@@ -144,6 +163,7 @@ declare global {
     'app-commands': HTMLAppCommandsElement;
     'app-edit-event': HTMLAppEditEventElement;
     'app-home': HTMLAppHomeElement;
+    'app-items': HTMLAppItemsElement;
     'app-login': HTMLAppLoginElement;
     'app-mainmenu': HTMLAppMainmenuElement;
     'app-root': HTMLAppRootElement;

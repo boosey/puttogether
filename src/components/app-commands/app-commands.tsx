@@ -17,6 +17,7 @@ export class AppCommands {
   @Event() userUpdated: EventEmitter
 
   private eventsCollectionRef = firebase.firestore().collection('events')
+  private itemsCollectionRef = firebase.firestore().collection('items')
 
   componentWillLoad() {
     // User logged out
@@ -33,6 +34,28 @@ export class AppCommands {
         var newUser = user;
         this.userUpdated.emit(newUser)
     })
+  }
+
+  @Listen('loadItemsRequested')
+  loadItemsRequestedHandler(ev) {
+    var uid = ev.detail.data ? ev.detail.data.userid : null
+    var eid = ev.detail.data ? ev.detail.data.eventId : null
+    var status = ev.detail.status
+
+    if ( uid !== null && eid !== null) {
+      var itemsQuery = this.itemsCollectionRef
+        .where('creator', "==", uid)
+        .where('eventId', "==", eid)
+
+      collectionData(itemsQuery, "itemsId").subscribe(
+         (item) => status.next(item),
+         () => console.log("Error getting items"),
+         () => status.complete()
+      )
+
+    } else {
+      status.complete()
+    }
   }
 
   @Listen('loadEventFromIdRequested')

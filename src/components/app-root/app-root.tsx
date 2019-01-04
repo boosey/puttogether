@@ -87,6 +87,7 @@ export class AppRoot {
 
           <ion-route url="/:userid/events/add" component="app-edit-event"/>
           <ion-route url="/:userid/events/:eventId/edit" component="app-edit-event"/>
+          <ion-route url="/:userid/events/:eventId/items" component="app-items"/>
           <ion-route url="/:userid/events" component="app-home"/>
           <ion-route url="/login" component="app-login"/>
 
