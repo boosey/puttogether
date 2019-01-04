@@ -38,13 +38,18 @@ export class AppItems {
       <ion-content padding>
         <ion-loading-controller></ion-loading-controller>
         <ion-list>
-          {this.items ? this.items.map((i) => (
-            <ion-card>
-               <ion-item>
-                {i.name}
-               </ion-item>
-            </ion-card>
-          )) : ''}
+          <ion-reorder-group>
+            {this.items ? this.items.map((i) => (
+              <ion-item>
+                 <ion-label>
+                  {i.name}
+                 </ion-label>
+                 <ion-reorder>
+                  <ion-icon name="reorder"></ion-icon>
+                 </ion-reorder>
+              </ion-item>
+            )) : ''}
+          </ion-reorder-group>
         </ion-list>
       </ion-content>
     ];
