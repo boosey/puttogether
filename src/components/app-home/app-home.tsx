@@ -1,5 +1,7 @@
 import { Component, Prop, State, Event, EventEmitter, Listen } from '@stencil/core';
 import { Subject } from "rxjs";
+import { format } from 'date-fns';
+
 
 @Component({
   tag: 'app-home',
@@ -58,21 +60,25 @@ export class AppHome {
           {this.events ? this.events.map((e) => (
               <ion-card>
                 <ion-card-header>
-                  <ion-card-title>{e.name}</ion-card-title>
+                  <ion-toolbar>
+                    <ion-buttons slot="end">
+                      <ion-button href={("/" + this.userid + "/events/" + e.eventId + "/edit")}>
+                        <ion-icon slot="icon-only" name="create"></ion-icon>
+                      </ion-button>
+                      <ion-button href={("/" + this.userid + "/events/" + e.eventId + "/items")}>
+                        <ion-icon slot="icon-only" name="list"></ion-icon>
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
                 </ion-card-header>
                 <ion-card-content>
-                  <ion-grid>
-                    <ion-row>
-                     <ion-col>
-                        <ion-button
-                          href={("/" + this.userid + "/events/" + e.eventId + "/edit")}
-                          fill="outline" >
-                        Edit
-                        </ion-button>
-                     </ion-col>
-                     <ion-col />
-                    </ion-row>
-                  </ion-grid>
+                  <ion-card-title>{e.name}</ion-card-title>
+                  <ion-item lines="none">
+                    {format(e.datetime, "dddd, MMM D, YYYY hh:mmA")}
+                  </ion-item>
+                  <ion-item lines="none">
+                    {e.attendees}
+                  </ion-item>
                 </ion-card-content>
               </ion-card>
           )) : ''}

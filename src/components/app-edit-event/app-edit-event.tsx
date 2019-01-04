@@ -18,6 +18,7 @@ export class AppEditEvent {
     @State() currentEvent = {
       name: '',
       datetime: this.formatDateTime(new Date()),
+      attendees: "6"
     }
 
     private startDatePicker
@@ -63,10 +64,13 @@ export class AppEditEvent {
       let value = ev.target.value;
       switch(ev.target.name){
 
-        case 'name': {
+        case 'name':
           this.currentEvent.name = value;
+          break;
+
+          case 'attendees':
+            this.currentEvent.attendees = value;
             break;
-        }
 
         case 'event-time':
           this.datetimeAsDate =
@@ -117,12 +121,17 @@ export class AppEditEvent {
 
           <ion-content padding>
           <ion-list>
-              <ion-item lines="none">
-                  <ion-label position="floating">Event Name</ion-label>
-                  <ion-input name="name" onInput={(ev) => this.changeValue(ev)}
+              <ion-item>
+                  <ion-label position="stacked">Event Name</ion-label>
+                  <ion-input
+                    name="name"
+                    value={this.currentEvent.name}
+                    placeholder="Enter name"
+                    onInput={(ev) => this.changeValue(ev)}
                     type="text"></ion-input>
               </ion-item>
               <ion-item lines="none">
+                <ion-icon name="calendar" />
                 <ion-datetime
                   name="event-date"
                   ref={(el)=>this.startDatePicker = el}
@@ -132,6 +141,7 @@ export class AppEditEvent {
                 </ion-datetime>
               </ion-item>
               <ion-item lines="none">
+              <ion-icon name="clock" />
                 <ion-datetime
                   name="event-time"
                   ref={(el)=>this.startTimePicker = el}
@@ -139,6 +149,15 @@ export class AppEditEvent {
                   onChange={(ev) => this.changeValue(ev)}
                   value={this.currentEvent.datetime}>
                 </ion-datetime>
+              </ion-item>
+              <ion-item>
+                  <ion-label position="stacked">Number of Attendees</ion-label>
+                  <ion-input
+                    name="attendees"
+                    value={this.currentEvent.attendees}
+                    placeholder="Number of Attendees"
+                    onInput={(ev) => this.changeValue(ev)}
+                    type="number"></ion-input>
               </ion-item>
           </ion-list>
 
