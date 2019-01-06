@@ -1,6 +1,14 @@
 import { Component, Prop, State, Event, EventEmitter, Listen } from '@stencil/core';
 import { Subject } from "rxjs";
 
+declare global {
+  export interface Item {
+    itemId?: string
+    eventId: string
+    creator: string
+    name: string
+  }
+}
 
 @Component({
   tag: 'app-items',
@@ -13,6 +21,8 @@ export class AppItems {
   @State() items = null
 
   @Event() loadItemsRequested: EventEmitter
+  @Event() updateItemRequested: EventEmitter
+  @Event() deleteItemRequested: EventEmitter
 
   componentDidLoad() {
 
@@ -28,6 +38,52 @@ export class AppItems {
     }
   }
 
+  @Listen('subpageHeaderButtonClicked')
+  subpageHeaderButtonClickedHandler(ev) {
+    this.requestAddItem();
+  }
+
+  requestAddItem() {
+    var newItem: Item = { eventId: this.eventId, creator: this.userid, name:''}
+
+    var requestStatus = new Subject()
+    var requestSubscription = requestStatus.subscribe(
+      (newItemRef) => (null),
+      () => console.log("Error adding item"),
+      () => { // Set focus to new item input control
+        }
+    )
+    var request = { item: newItem, status: requestStatus}
+    this.updateItemRequested.emit(request)
+  }
+
+  @Listen('itemUpdated')
+  requestUpdateItem(ev) {
+
+    var requestStatus = new Subject()
+    var requestSubscription = requestStatus.subscribe(
+      (newItemRef) => (null),
+      () => console.log("Error updating item"),
+      () => { // Set focus to new item input control
+        }
+    )
+    var request = { item: ev.detail, status: requestStatus}
+    this.updateItemRequested.emit(request)
+  }
+
+  @Listen('itemDeleted')
+  requestDeleteItem(ev) {
+
+    var requestStatus = new Subject()
+    var requestSubscription = requestStatus.subscribe(
+      () => {},
+      () => console.log("Error updating item"),
+      () => {}
+    )
+    var request = { item: ev.detail, status: requestStatus}
+    this.deleteItemRequested.emit(request)
+  }
+
   render() {
     return [
 
@@ -39,11 +95,7 @@ export class AppItems {
         <ion-loading-controller></ion-loading-controller>
         <ion-list>
           {this.items ? this.items.map((i) => (
-            <ion-card>
-               <ion-item>
-                {i.name}
-               </ion-item>
-            </ion-card>
+            <app-item item={i} />
           )) : ''}
         </ion-list>
       </ion-content>
