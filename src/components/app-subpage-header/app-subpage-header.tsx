@@ -11,6 +11,12 @@ export class AppSubpageHeader {
     @Prop() titleText: string = 'Set a Page Title'
     @Prop() button: string = null
 
+    @Event() subpageHeaderButtonClicked: EventEmitter
+
+    buttonClicked(ev) {
+        this.subpageHeaderButtonClicked.emit(ev)
+    }
+
     render() {
         return [
             <ion-toolbar color="primary">
@@ -19,9 +25,9 @@ export class AppSubpageHeader {
               </ion-buttons>
               <ion-title>{this.titleText}</ion-title>
               {this.button !== null ?
-                <ion-buttons slot="end">
+                <ion-buttons slot="end" onClick={(ev)=>this.buttonClicked(ev)}>
                   <ion-button>
-                    <ion-icon slot="icon-only" name={this.button}></ion-icon>
+                    <ion-icon slot="icon-only" name={this.button}/>
                   </ion-button>
                 </ion-buttons>
                : ''

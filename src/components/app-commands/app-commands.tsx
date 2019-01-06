@@ -47,7 +47,7 @@ export class AppCommands {
         .where('creator', "==", uid)
         .where('eventId', "==", eid)
 
-      collectionData(itemsQuery, "itemsId").subscribe(
+      collectionData(itemsQuery, "itemId").subscribe(
          (item) => status.next(item),
          () => console.log("Error getting items"),
          () => status.complete()
@@ -109,6 +109,40 @@ export class AppCommands {
           .then(status.complete())
     }
   }
+
+  @Listen('updateItemRequested')
+  updateItemRequestedHandler(ev) {
+    var item: Item = ev.detail.item
+    var status = ev.detail.status
+
+    if (typeof item.itemId === 'undefined' ||
+               item.itemId === null) {
+      this.itemsCollectionRef
+        .add(item)
+        .then((newDocRef)=> {
+          status.next(newDocRef)
+          status.complete()
+      })
+    } else {
+        var itemId = item.itemId
+        delete item.itemId
+        this.itemsCollectionRef.doc(itemId)
+          .update(item)
+          .then(status.complete())
+    }
+  }
+
+  @Listen('deleteItemRequested')
+  deleteItemRequestedHandler(ev) {
+    var item: Item = ev.detail.item
+    var status = ev.detail.status
+
+    if (item.itemId) {
+      this.itemsCollectionRef.doc(item.itemId)
+        .delete()
+        .then(status.complete())
+    }
+}
 
   @Listen('loginRequested')
   loginRequestedHandler(ev) {

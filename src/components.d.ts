@@ -37,13 +37,24 @@ export namespace Components {
     'userid'?: string;
   }
 
+  interface AppItem {
+    'item': Item;
+  }
+  interface AppItemAttributes extends StencilHTMLAttributes {
+    'item'?: Item;
+    'onItemDeleted'?: (event: CustomEvent) => void;
+    'onItemUpdated'?: (event: CustomEvent) => void;
+  }
+
   interface AppItems {
     'eventId': string;
     'userid': string;
   }
   interface AppItemsAttributes extends StencilHTMLAttributes {
     'eventId'?: string;
+    'onDeleteItemRequested'?: (event: CustomEvent) => void;
     'onLoadItemsRequested'?: (event: CustomEvent) => void;
+    'onUpdateItemRequested'?: (event: CustomEvent) => void;
     'userid'?: string;
   }
 
@@ -72,6 +83,7 @@ export namespace Components {
   }
   interface AppSubpageHeaderAttributes extends StencilHTMLAttributes {
     'button'?: string;
+    'onSubpageHeaderButtonClicked'?: (event: CustomEvent) => void;
     'titleText'?: string;
   }
 }
@@ -81,6 +93,7 @@ declare global {
     'AppCommands': Components.AppCommands;
     'AppEditEvent': Components.AppEditEvent;
     'AppHome': Components.AppHome;
+    'AppItem': Components.AppItem;
     'AppItems': Components.AppItems;
     'AppLogin': Components.AppLogin;
     'AppMainmenu': Components.AppMainmenu;
@@ -92,6 +105,7 @@ declare global {
     'app-commands': Components.AppCommandsAttributes;
     'app-edit-event': Components.AppEditEventAttributes;
     'app-home': Components.AppHomeAttributes;
+    'app-item': Components.AppItemAttributes;
     'app-items': Components.AppItemsAttributes;
     'app-login': Components.AppLoginAttributes;
     'app-mainmenu': Components.AppMainmenuAttributes;
@@ -116,6 +130,12 @@ declare global {
   var HTMLAppHomeElement: {
     prototype: HTMLAppHomeElement;
     new (): HTMLAppHomeElement;
+  };
+
+  interface HTMLAppItemElement extends Components.AppItem, HTMLStencilElement {}
+  var HTMLAppItemElement: {
+    prototype: HTMLAppItemElement;
+    new (): HTMLAppItemElement;
   };
 
   interface HTMLAppItemsElement extends Components.AppItems, HTMLStencilElement {}
@@ -152,6 +172,7 @@ declare global {
     'app-commands': HTMLAppCommandsElement
     'app-edit-event': HTMLAppEditEventElement
     'app-home': HTMLAppHomeElement
+    'app-item': HTMLAppItemElement
     'app-items': HTMLAppItemsElement
     'app-login': HTMLAppLoginElement
     'app-mainmenu': HTMLAppMainmenuElement
@@ -163,6 +184,7 @@ declare global {
     'app-commands': HTMLAppCommandsElement;
     'app-edit-event': HTMLAppEditEventElement;
     'app-home': HTMLAppHomeElement;
+    'app-item': HTMLAppItemElement;
     'app-items': HTMLAppItemsElement;
     'app-login': HTMLAppLoginElement;
     'app-mainmenu': HTMLAppMainmenuElement;
