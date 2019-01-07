@@ -61,7 +61,8 @@ export class AppHome {
               <ion-card>
                 <ion-card-header>
                   <ion-toolbar>
-                    <ion-buttons slot="end">
+                  <ion-card-title>{e.name}</ion-card-title>
+                      <ion-buttons slot="end">
                       <ion-button href={("/" + this.userid + "/events/" + e.eventId + "/edit")}>
                         <ion-icon slot="icon-only" name="create"></ion-icon>
                       </ion-button>
@@ -72,11 +73,17 @@ export class AppHome {
                   </ion-toolbar>
                 </ion-card-header>
                 <ion-card-content>
-                  <ion-card-title>{e.name}</ion-card-title>
-                  <ion-item lines="none">
-                    {format(e.datetime, "dddd, MMM D, YYYY hh:mmA")}
-                  </ion-item>
-                  <ion-item lines="none">
+
+                <ion-item lines="none" class="item-min-height">
+                  <ion-icon name="calendar" class="icon-padding"/>
+                  {format(e.datetime, "dddd, MMM D, YYYY")}
+                </ion-item>
+                <ion-item lines="none" class="item-min-height">
+                  <ion-icon name="clock" class="icon-padding"/>
+                  {format(e.datetime, "hh:mmA")}
+                </ion-item>
+                  <ion-item lines="none" class="item-min-height">
+                    <ion-icon name="people" class="icon-padding"/>
                     {e.attendees}
                   </ion-item>
                 </ion-card-content>
