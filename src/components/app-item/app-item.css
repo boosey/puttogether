@@ -1,4 +1,4 @@
 
-ion-item.show-button { display: block; --ion-item-highlight-height: 0px;  }
+ion-item.show-button { display: block; --full-highlight-height: 0px;  }
 
-ion-item.hide-button {display: none; --ion-item-highlight-height: 0px; }
+ion-item.hide-button {display: none; }
